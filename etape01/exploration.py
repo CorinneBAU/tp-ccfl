@@ -16,6 +16,23 @@ def compter_par(lignes, colonne):
     compteur = Counter(ligne[colonne] for ligne in lignes)
     return dict(compteur)
 
+class Site:
+    def __init__(self, code_site, nom, commune, annee_ouverture, surface_m2):
+        self.code_site = code_site
+        self.nom = nom
+        self.commune = commune
+        self.annee_ouverture = int(annee_ouverture)
+        self.surface_m2 = int(surface_m2)
+
+    def anciennete(self, annee_reference):
+        return annee_reference - self.annee_ouverture
+
+    def __str__(self):
+        return (
+            f"{self.code_site} — {self.nom} "
+            f"({self.commune}), {self.surface_m2} m2"
+        )
+
 
 def main():
     # Verification lire_csv(chemin)
@@ -35,6 +52,11 @@ def main():
     materiel = lire_csv(FICHIER_MATERIEL)
     compteur_materiel = compter_par(materiel, "etat")
     print(compteur_materiel)
+
+    # Verification class Site:
+    sites = lire_csv(FICHIER_SITES)
+    print(sites)
+
 
 if __name__ == "__main__":    
     main()

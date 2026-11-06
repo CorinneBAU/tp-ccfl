@@ -4,7 +4,7 @@
 
 | Étape | État (terminée / partielle / non abordée) | Points de vérification obtenus | Ce qui a bloqué | Temps réel passé par étape |
 |---|---|---|---|---|
-| 1 | | | | |
+| 1 |partielle | | je ne comprends pas ce qu'on me demande pour la fonction total_par(), j'ai eu bien du mal à comprendre la fonction compter(lignes, colonnes) car "qui renvoie un dictionnaire associant chaque valeur distincte de colonne à son nombre d'occurrences." n'est pas compréhensible pour moi| |
 | 2 | | | | |
 | 3 | | | | |
 | 4 | | | | |
