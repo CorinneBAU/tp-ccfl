@@ -9,7 +9,7 @@ FICHIER_SITES = "data/sites.csv"
 # Charger les fichiers CSV dans des DataFrames Pandas et convertir les colonnes de dates 
 # date_debut, date_fin_prevue et date_retour_reelle en dates (format datetime).
 df_sites = pd.read_csv(FICHIER_SITES)
-df_materiel = pd.read_csv(FICHIER_MATERIEL)
+df_materiel = pd.read_csv(FICHIER_MATERIEL,)
 df_associations = pd.read_csv(FICHIER_ASSOCIATIONS)
 df_reservations = pd.read_csv(FICHIER_RESERVATIONS,
                               parse_dates=["date_debut", "date_fin_prevue", "date_retour_reelle"])
@@ -21,6 +21,10 @@ print("info")
 print(df_materiel.info())
 print("valeurs manquantes")
 print(df_materiel.isna().sum())
+# La valeur_achat est de type str car elle contient des cellules avec des guillements ("").
+df_materiel["valeur_achat"] = df_materiel["valeur_achat"].str.replace(",", ".").astype(float)
+print("info après conversion de la colonne 'valeur_achat' en float")
+print(df_materiel.info())
 
 
 print("Quelques informations sur le DataFrame 'reservations' :")
