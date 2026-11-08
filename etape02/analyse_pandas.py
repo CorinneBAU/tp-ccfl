@@ -1,10 +1,12 @@
 import pandas as pd
-
+from pathlib import Path
 
 FICHIER_ASSOCIATIONS = "data/associations.csv"
 FICHIER_MATERIEL = "data/materiel.csv"
 FICHIER_RESERVATIONS = "data/reservations.csv"
 FICHIER_SITES = "data/sites.csv" 
+
+FICHIER_TOP10_MATERIEL = "sorties/top10_materiel.csv"
 
 # Charger les fichiers CSV dans des DataFrames Pandas et convertir les colonnes de dates 
 # date_debut, date_fin_prevue et date_retour_reelle en dates (format datetime).
@@ -55,3 +57,32 @@ print(df_reservations.groupby("code_site")
       .agg(nb_reservation=("id_reservation", "size"), 
            quantite_empruntée=("quantite", "sum")).sort_values("nb_reservation", ascending=False)
         )
+
+#  Construire le dataframe complet
+df_materiel_sans_doublons = df_materiel.drop_duplicates(subset=["id_materiel"])
+df_complet=df_reservations.merge(df_materiel_sans_doublons, on="id_materiel", how="left")
+print(df_complet.head(10))
+print(df_complet["reference"].isna().sum())
+df_complet = df_complet.merge(df_associations, on="id_association", how="left")
+print(df_complet.head(10))
+print(df_complet["type_association"].isna().sum())
+print(f"Le nombre de lignes de df_complet est de {df_complet.shape[0]}")
+# print(df_complet.columns.to_list())
+
+# Afficher le top 10 des matériels les plus réservés à partir de df_complet
+print("Top 10 des matériels les plus réservés :")
+top10 = (
+    df_complet
+    .groupby("id_materiel")
+    .agg(designation=("designation", "first"), 
+         nb_reservation=("id_reservation", "size")
+         ) \
+    .sort_values("nb_reservation", ascending=False) \
+    .head(10)
+    .reset_index()
+)
+print(top10)
+
+# Enregistrer le top 10 des matériels les plus réservés dans le fichier CSV
+Path("sorties").mkdir(exist_ok=True)
+top10.to_csv(FICHIER_TOP10_MATERIEL, index=False, encoding="utf-8")
